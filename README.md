@@ -1,5 +1,5 @@
 You are battling for dominance inside an imperfect 3d maze.
-You can not enter where your enemy has gone before. 
+You can not enter where your enemy has gone before.
 Both you and your enemy have been assigned a random starting location.
 
 You can only specify one of six directions that you want to explore.
