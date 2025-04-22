@@ -60,35 +60,24 @@ export class Network {
 
 let network = new Network(16, 6, 128, 256);
 
-console.log(network);
-console.log(
-  ["left", "right", "up", "down", "forward", "backward"][network.step()]
-);
-
 export const Elysium = function (myName, myNode, enemyNode) {
-  const possibleDirections = [];
-  if (myNode.left) {
-    possibleDirections.push("left");
-  }
-  if (myNode.right) {
-    possibleDirections.push("right");
-  }
-  if (myNode.up) {
-    possibleDirections.push("up");
-  }
-  if (myNode.down) {
-    possibleDirections.push("down");
-  }
-  if (myNode.forward) {
-    possibleDirections.push("forward");
-  }
-  if (myNode.backward) {
-    possibleDirections.push("backward");
-  }
+  network.inputs[0].value = +!!myNode.x;
+  network.inputs[1].value = +!!myNode.y;
+  network.inputs[2].value = +myNode.left;
+  network.inputs[3].value = +myNode.right;
+  network.inputs[4].value = +myNode.up;
+  network.inputs[5].value = +myNode.down;
+  network.inputs[6].value = +myNode.forward;
+  network.inputs[7].value = +myNode.backward;
 
-  const i = Math.floor(Math.random() * possibleDirections.length);
-  if (i >= possibleDirections.length) {
-    console.log(myNode);
-  }
-  return possibleDirections[i];
+  network.inputs[8].value = +!!enemyNode.x;
+  network.inputs[9].value = +!!enemyNode.y;
+  network.inputs[10].value = +enemyNode.left;
+  network.inputs[11].value = +enemyNode.right;
+  network.inputs[12].value = +enemyNode.up;
+  network.inputs[13].value = +enemyNode.down;
+  network.inputs[14].value = +enemyNode.forward;
+  network.inputs[15].value = +enemyNode.backward;
+
+  return ["left", "right", "up", "down", "forward", "backward"][network.step()];
 };
