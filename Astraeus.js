@@ -25,8 +25,8 @@ export const Astraeus = function (myName, node, enemyNode) {
     right: { x: node.x + 1, y: node.y, z: node.z },
     up: { x: node.x, y: node.y - 1, z: node.z },
     down: { x: node.x, y: node.y + 1, z: node.z },
-    forward: { x: node.x, y: node.y, z: node.z + 1 },
-    backward: { x: node.x, y: node.y, z: node.z - 1 },
+    forward: { x: node.x, y: node.y, z: node.z - 1 },
+    backward: { x: node.x, y: node.y, z: node.z + 1 },
   };
 
   const possibleDirections = [];
