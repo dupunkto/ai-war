@@ -6,4 +6,4 @@ You can only specify one of six directions that you want to explore.
 After you got to pick one direction it is up to your enemy to make the same choice.
 Collect as much territory as possible to destroy your rival AI!
 
-Run game.js to get started. Replace one of the two existing AIs to train your own AI for dominance.
+Run game.js to get started. Replace one of the two existing algorithms to train your own algorithm for dominance.
