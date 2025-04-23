@@ -1,11 +1,12 @@
-import { Astraeus } from "./Astraeus.js";
-import { Colonia } from "./Colonia.js";
-import { Elysium } from "./Elysium.js";
+import { Astraeus } from "./players/Astraeus.js";
+import { Colonia } from "./players/Colonia.js";
+import { RandomDirection } from "./players/RandomDirection.js";
+import { Teacher } from "./players/Teacher.js";
 
 export const players = [
     {
-        name: 'Elysium',
-        algorithm: Elysium,
+        name: 'RandomDirection',
+        algorithm: RandomDirection,
     },
     {
         name: 'Astraeus',
@@ -15,4 +16,8 @@ export const players = [
         name: 'Colonia',
         algorithm: Colonia
     },
+    {
+        name: 'Teacher',
+        algorithm: Teacher
+    }
 ]

@@ -1,5 +1,9 @@
 // random direction
-export const Elysium = function (myName, myNode, enemyNode) {
+export const RandomDirection = function (myName, myNode, enemyNode) {
+    if(myName === null) {
+        return;
+    }
+
     const possibleDirections = [];
     if (myNode.left) {
         possibleDirections.push('left');

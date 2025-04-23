@@ -62,6 +62,10 @@ Array.prototype.random = function () {
   let network = new Network(16, 6, 128, 256);
   
   export const Colonia = function (myName, myNode, enemyNode) {
+    if (myName === null) {
+      return;
+    }
+
     network.inputs[0].value = +!!myNode.x;
     network.inputs[1].value = +!!myNode.y;
     network.inputs[2].value = +myNode.left;

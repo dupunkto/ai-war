@@ -17,6 +17,7 @@ const allPlayerStats = players.reduce((map, player) => {
     };
     return map;
 }, {});
+console.log(allPlayerStats);
 
 function updatePlayerStats(result, player) {
     const playerStats = allPlayerStats[player.name];
@@ -35,7 +36,7 @@ function updatePlayerStats(result, player) {
     }
 }
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 30; i++) {
     for (const pa of players) {
         for (const pb of players) {
             // remove if to play against self

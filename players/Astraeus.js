@@ -2,12 +2,21 @@
 let iterCounter = 0;
 let relativeZ = 0;
 
-const claimedTerritory = [];
-const enemyTerritory = [];
+let claimedTerritory = [];
+let enemyTerritory = [];
 
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 export const Astraeus = function (myName, node, enemyNode) {
+  if (myName === null) {
+    iterCounter = 0;
+    relativeZ = 0;
+
+    claimedTerritory = [];
+    enemyTerritory = [];
+    return;
+  }
+
   iterCounter++;
 
   // node is where we are now.
