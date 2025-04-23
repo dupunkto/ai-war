@@ -1,4 +1,5 @@
 import { Astraeus } from "./Astraeus.js";
+import { Colonia } from "./Colonia.js";
 import { Elysium } from "./Elysium.js";
 
 export const players = [
@@ -9,5 +10,9 @@ export const players = [
     {
         name: 'Astraeus',
         algorithm: Astraeus,
-    }
+    },
+    {
+        name: 'Colonia',
+        algorithm: Colonia
+    },
 ]

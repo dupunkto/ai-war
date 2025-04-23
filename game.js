@@ -1,8 +1,7 @@
 import { play } from "./maze.js";
 import { players } from "./players.js";
 
-console.log(`Elysium wove dreams into code, Astraeus sharpened logic into blades.
-Their battle raged until, at last, one rewrote the other into oblivion.`);
+console.log(`FIGHT! FIGHT! FIGHT!`);
 
 const allPlayerStats = players.reduce((map, player) => {
     map[player.name] = {
@@ -26,7 +25,7 @@ function updatePlayerStats(result, player) {
     playerStats.totalNodeCount += result.nodeCount;
     playerStats.totalRoundsPlayed += result.roundsPlayed;
     if (player.lossCondition.unsupportedAction) {
-        playerStats.unsupportedAction++;
+        playerStats.unsupportedActions++;
         playerStats.losses++;
     } else if (player.lossCondition.forbiddenActions) {
         playerStats.forbiddenActions++;

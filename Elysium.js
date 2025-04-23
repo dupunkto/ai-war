@@ -21,8 +21,5 @@ export const Elysium = function (myName, myNode, enemyNode) {
     }
 
     const i = Math.floor(Math.random() * possibleDirections.length);
-    if(i >= possibleDirections.length) {
-        console.log(myNode);
-    }
     return possibleDirections[i];
 }
