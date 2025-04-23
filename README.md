@@ -9,6 +9,8 @@ Collect as much territory as possible to destroy your rival AI!
 Run game.js to get started. Train your own algorithm for dominance by adding it to players.js.
 
 # Wall of fame (400 iterations)
+player   | wins     |
+---------|----------|
 Astraeus | 400 wins |
 Elysium  | 200 wins |
 Colonia  | 0 wins   |
