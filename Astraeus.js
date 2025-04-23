@@ -1,3 +1,4 @@
+//credits: https://github.com/dupunkto/ai-war/commit/66ed33a38b44a9c417fc2e156f8cb53763b922c4
 let iterCounter = 0;
 let relativeZ = 0;
 
