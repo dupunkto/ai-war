@@ -7,3 +7,47 @@ After you got to pick one direction it is up to your enemy to make the same choi
 Collect as much territory as possible to destroy your rival AI!
 
 Run game.js to get started. Train your own algorithm for dominance by adding it to players.js.
+
+# Wall of fame (400 iterations)
+Astraeus | 400 wins |
+Elysium  | 200 wins |
+Colonia  | 0 wins   |
+
+Apr 23, 14:25, 2025
+```json
+[
+  {
+    totalNodeCount: 60846000,
+    totalRoundsPlayed: 18876,
+    name: 'Astraeus',
+    totalPoints: 4690607,
+    playCount: 400,
+    wins: 400,
+    losses: 0,
+    unsupportedActions: 0,
+    forbiddenActions: 0
+  },
+  {
+    totalNodeCount: 60846000,
+    totalRoundsPlayed: 18750,
+    name: 'Elysium',
+    totalPoints: 3355142,
+    playCount: 400,
+    wins: 200,
+    losses: 200,
+    unsupportedActions: 0,
+    forbiddenActions: 0
+  },
+  {
+    totalNodeCount: 60846000,
+    totalRoundsPlayed: 2466,
+    name: 'Colonia',
+    totalPoints: 610074,
+    playCount: 400,
+    wins: 0,
+    losses: 400,
+    unsupportedActions: 287,
+    forbiddenActions: 0
+  }
+]
+```
