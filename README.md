@@ -9,11 +9,11 @@ Collect as much territory as possible to destroy your rival AI!
 Run game.js to get started. Train your own algorithm for dominance by adding it to players.js.
 
 # Wall of fame (400 iterations)
-player   | wins     |
----------|----------|
-Astraeus | 400 wins |
-Elysium  | 200 wins |
-Colonia  | 0 wins   |
+player   | wins     | losses     |
+---------|----------|------------|
+Astraeus | 400 wins | 0 losses   |
+Elysium  | 200 wins | 200 losses |
+Colonia  | 0 wins   | 400 losses |
 
 Apr 23, 14:25, 2025
 ```json
