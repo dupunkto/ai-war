@@ -1,4 +1,13 @@
 // (random) BEST direction
+import { dlopen, suffix } from "bun:ffi";
+const lib = dlopen(`libColonia.${suffix}`, {
+    hello: {
+        args: [],
+        returns: "cstring",
+    },
+});
+
+const { hello } = lib.symbols;
 
 Array.prototype.random = function () {
   return this[Math.floor(Math.random() * this.length)];
@@ -59,8 +68,12 @@ export class Network {
 }
 
 let network = new Network(16, 6, 128, 256);
+console.log(hello().toString())
 
-export const Elysium = function (myName, myNode, enemyNode) {
+export const ColoniaTrain = function() {
+};
+
+export const Colonia = function (myName, myNode, enemyNode) {
   network.inputs[0].value = +!!myNode.x;
   network.inputs[1].value = +!!myNode.y;
   network.inputs[2].value = +myNode.left;
