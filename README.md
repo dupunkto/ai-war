@@ -15,7 +15,7 @@ player          | wins     | losses     | based on
 ----------------|----------|------------|----------|
 Astraeus        | 176 wins | 4 losses   | https://github.com/dupunkto/ai-war/commit/66ed33a38b44a9c417fc2e156f8cb53763b922c4
 RandomDirection | 123 wins | 57 losses  | local
-Teacher         | 61       | 119        |
+Teacher         | 61       | 119        | local
 Colonia         | 0 wins   | 180 losses | https://github.com/dupunkto/ai-war/commit/970e35b96442002966962a0208d43cffe2717560
 
 Apr 23, 15:10, 2025
