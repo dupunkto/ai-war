@@ -1,3 +1,4 @@
+// TODO optimize for performance
 export const play = (function () {
   const center = {
     x: 0,
@@ -112,7 +113,7 @@ export const play = (function () {
       const newNode = createNode(allNodes, x, y, z);
       node.nodes[direction.id] = newNode;
 
-      if (explosions >= 500) {
+      if (explosions >= 400) {
         continue;
       } else if (explosions < 2) {
         explodeCenter(allNodes, directions3D, newNode, explosions + 1);
@@ -145,6 +146,7 @@ export const play = (function () {
     return {
       x: node.x,
       y: node.y,
+      z: node.z,
       left: !!node.left,
       right: !!node.right,
       up: !!node.up,
@@ -156,20 +158,42 @@ export const play = (function () {
   }
 
   return function (playerName1, playerFunc1, playerName2, playerFunc2) {
+    playerFunc1(null, null, null);
+    playerFunc2(null, null, null);
+
     let keys = Object.keys(allNodes);
     let player1 = allNodes[keys[Math.floor(Math.random() * keys.length)]];
     let player2 = allNodes[keys[Math.floor(Math.random() * keys.length)]];
     player1.owner = playerName1;
     player2.owner = playerName2;
 
-    const rounds = Object.keys(allNodes).length * 4;
-    console.log(`${keys.length} nodes, will play for ${rounds} rounds`);
-    console.log(
-      `${playerName1} starts at x=${player1.x}, y=${player1.y}, z=${player1.z}`,
-    );
-    console.log(
-      `${playerName2} starts at x=${player2.x}, y=${player2.y}, z=${player2.z}`,
-    );
+    const rounds = keys.length * 4;
+    const result = {
+      nodeCount: keys.length,
+      rounds,
+      roundsPlayed: 0,
+      player1: {
+        name: playerName1,
+        start: readonlyNode(player1),
+        points: 0,
+        lossCondition: {
+          unsupportedAction: false,
+          forbiddenAction: false,
+          points: false,
+        },
+      },
+      player2: {
+        name: playerName2,
+        start: readonlyNode(player2),
+        points: 0,
+        lossCondition: {
+          unsupportedAction: false,
+          forbiddenAction: false,
+          points: false,
+        },
+      },
+      victor: null,
+    };
 
     for (let i = 0; i < rounds; i++) {
       let direction = playerFunc1(
@@ -177,17 +201,17 @@ export const play = (function () {
         readonlyNode(player1),
         readonlyNode(player2),
       );
-      if (!player1[direction]) {
-        console.log(player1);
-      }
       player1 = player1[direction];
 
       if (!player1 || typeof player1.x !== "number") {
-        console.log(player1);
-        return `${playerName1} has chosen an invalid direction: ${direction}. ${playerName2} wins!`;
+        result.victor = player2;
+        result.player1.lossCondition.unsupportedAction = true;
+        break;
       }
       if (player1.owner === playerName2) {
-        return `${playerName1} has entered a node that is owned by ${playerName2}. ${playerName2} wins!`;
+        result.victor = player2;
+        result.player1.lossCondition.forbiddenAction = true;
+        break;
       }
       player1.owner = playerName1;
 
@@ -196,36 +220,38 @@ export const play = (function () {
         readonlyNode(player2),
         readonlyNode(player1),
       );
-      if (!player2[direction]) {
-        console.log(player2);
-      }
       player2 = player2[direction];
 
       if (!player2 || typeof player2.x !== "number") {
-        return `${playerName2} has chosen an invalid direction: ${direction}. ${playerName1} wins!`;
+        result.victor = player1;
+        result.player2.lossCondition.unsupportedAction = true;
+        break;
       }
       if (player2.owner === playerName1) {
-        return `${playerName2} has entered a node that is owned by ${playerName1}. ${playerName1} wins!`;
+        result.victor = player1;
+        result.player2.lossCondition.forbiddenAction = true;
+        break;
       }
       player2.owner = playerName2;
+
+      result.roundsPlayed = i + 1;
     }
 
-    let player1Score = 0;
-    let player2Score = 0;
     for (const node of Object.values(allNodes)) {
       if (node.owner === playerName1) {
-        player1Score++;
+        result.player1.points++;
       } else if (node.owner === playerName2) {
-        player2Score++;
+        result.player2.points++;
       }
     }
 
-    if (player1Score === player2Score) {
-      return `It is a tie! Both players scored ${player1Score} points!`;
-    } else if (player1Score > player2Score) {
-      return `${playerName1} wins with ${player1Score} points vs ${player2Score} points!`;
-    } else {
-      return `${playerName2} wins with ${player2Score} points vs ${player1Score} points!`;
+    if (result.player1.points > result.player2.points) {
+      result.player2.lossCondition.points = true;
+      result.victor = result.player1;
+    } else if (result.player1.points < result.player2.points) {
+      result.player1.lossCondition.points = true;
+      result.victor = result.player2;
     }
+    return result;
   };
 })();

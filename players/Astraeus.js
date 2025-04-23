@@ -46,7 +46,7 @@ export const Astraeus = function (myName, node, enemyNode) {
 
     p.potentialEnemyNode = enemyTerritory.some((n) => n.x == p.x && n.y == p.y);
     p.alreadyClaimed = claimedTerritory.some(
-      (n) => n.x == p.x && n.y == p.y && n.z == p.z
+      (n) => n.x == p.x && n.y == p.y && n.z == p.z,
     );
 
     p.direction = direction;
@@ -59,15 +59,15 @@ export const Astraeus = function (myName, node, enemyNode) {
   let moveReason;
 
   const freeMoves = possibleMoves.filter(
-    (n) => !n.alreadyClaimed && !n.potentialEnemyNode
+    (n) => !n.alreadyClaimed && !n.potentialEnemyNode,
   );
 
   const dangerousButFree = possibleMoves.filter(
-    (n) => !n.alreadyClaimed && n.potentialEnemyNode
+    (n) => !n.alreadyClaimed && n.potentialEnemyNode,
   );
 
   const lastResortMoves = possibleMoves.filter(
-    (n) => !freeMoves.includes(n) && !dangerousButFree.includes(n)
+    (n) => !freeMoves.includes(n) && !dangerousButFree.includes(n),
   );
 
   if (freeMoves.length != 0) {
@@ -102,7 +102,7 @@ export const Astraeus = function (myName, node, enemyNode) {
   // prompt("Next?");
 
   console.log(
-    `[${iterCounter}] coords: ${node.x},${node.y},${node.z} move: ${finalDecision} (${moveReason}) ter: ${territory.size}`
+    `[${iterCounter}] coords: ${node.x},${node.y},${node.z} move: ${finalDecision} (${moveReason}) ter: ${territory.size}`,
   );
 
   return finalDecision;

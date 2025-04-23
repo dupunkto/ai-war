@@ -46,8 +46,8 @@ export class Network {
           new Connection(
             this.neurons.random(),
             this.neurons.random(),
-            Math.random() * 2 - 1
-          )
+            Math.random() * 2 - 1,
+          ),
       );
   }
 
