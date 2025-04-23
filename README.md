@@ -16,7 +16,7 @@ Elysium  | 200 wins | 200 losses |
 Colonia  | 0 wins   | 400 losses |
 
 Apr 23, 14:25, 2025
-```json
+```javascript
 [
   {
     totalNodeCount: 60846000,
