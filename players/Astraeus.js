@@ -1,4 +1,5 @@
-let iterCounter = 0;
+let roundIter = 0;
+let backtrackIter = 0;
 
 const claimedTerritory = [];
 const enemyTerritory = [];
@@ -8,7 +9,7 @@ const backtrack = []; // Backtrack contains the opposite of those moves.
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 export const Astraeus = function (myName, node, enemyNode) {
-  iterCounter++;
+  roundIter++;
 
   // node is where we are now.
   // enemyNode is where the enemy is now.
@@ -67,6 +68,7 @@ export const Astraeus = function (myName, node, enemyNode) {
   } else if (backtrack.length != 0) {
     // If we find a dead-end, backtrack until we find an free space.
     finalDecision = backtrack.pop();
+    backtrackIter++;
     reason = "backtrack";
   } else {
     // If we detect there are no options left, at least stay in our
@@ -84,8 +86,12 @@ export const Astraeus = function (myName, node, enemyNode) {
 
   // prompt("Next?");
 
+  // console.log(
+  //   `[${iterCounter}] coords: ${node.x},${node.y},${node.z} move: ${finalDecision} (${reason}) ter: ${territory.size}`
+  // );
+
   console.log(
-    `[${iterCounter}] coords: ${node.x},${node.y},${node.z} move: ${finalDecision} (${reason}) ter: ${territory.size}`
+    `territory: ${territory.size} iter: ${roundIter} backtrack: ${backtrackIter}`
   );
 
   if (reason != "backtrack") {

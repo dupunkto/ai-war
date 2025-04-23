@@ -158,9 +158,6 @@ export const play = (function () {
   }
 
   return function (playerName1, playerFunc1, playerName2, playerFunc2) {
-    playerFunc1(null, null, null);
-    playerFunc2(null, null, null);
-
     let keys = Object.keys(allNodes);
     let player1 = allNodes[keys[Math.floor(Math.random() * keys.length)]];
     let player2 = allNodes[keys[Math.floor(Math.random() * keys.length)]];
