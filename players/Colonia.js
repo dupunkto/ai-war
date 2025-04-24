@@ -1,98 +1,78 @@
 // (random) BEST direction
-import { dlopen, FFIType, suffix } from "bun:ffi";
-const { f32, bool, cstring } = FFIType;
-const lib = dlopen(`libColonia.${suffix}`, {
+import { play } from "../maze.js";
+
+import { dlopen, FFIType, JSCallback, suffix } from "bun:ffi";
+const { u32, f32, bool, cstring, callback } = FFIType;
+const {
+    symbols: { init, deinit, step, train },
+} = dlopen(`libColonia.${suffix}`, {
     init: {
         args: [],
-        returns: FFIType.void,
+        returns: "void",
+    },
+    deinit: {
+        args: [],
+        returns: "void",
     },
     step: {
-        args: [f32, f32, f32, bool, bool, bool, bool, bool, bool, f32, f32, f32, bool, bool, bool, bool, bool, bool],
+        args: [u32, f32, f32, f32, bool, bool, bool, bool, bool, bool, f32, f32, f32, bool, bool, bool, bool, bool, bool],
         returns: cstring
+    },
+    train: {
+        args: [u32, callback, callback],
+        returns: "void",
     },
 });
 
-const { init, step } = lib.symbols;
+const gc = new JSCallback(
+    async () => {
+        const snapshot = generateHeapSnapshot();
+        await Bun.write("heap.json", JSON.stringify(snapshot, null, 2));
+    },
+    {
+        args: [],
+        returns: "void",
+    },
+);
+
+const better = new JSCallback(
+    (lhs, rhs) => {
+        const res = play("lhs", makeStep(lhs+1), "rhs", makeStep(rhs+1));
+        return res.player1.points >= res.player2.points;
+    },
+    {
+        args: [u32, u32],
+        returns: bool,
+    },
+);
+
+const makeStep = function(index) {
+    return function (myName, myNode, enemyNode) {
+        step(
+            index,
+            myNode.x,
+            myNode.y,
+            myNode.z,
+            myNode.left,
+            myNode.right,
+            myNode.up,
+            myNode.down,
+            myNode.forward,
+            myNode.backward,
+            enemyNode.x,
+            enemyNode.y,
+            enemyNode.z,
+            enemyNode.left,
+            enemyNode.right,
+            enemyNode.up,
+            enemyNode.down,
+            enemyNode.forward,
+            enemyNode.backward,
+        );
+    }
+};
 
 init();
+train(100, better, gc);
 
-export const ColoniaTrain = function() {
-};
-
-export class Neuron {
-  constructor(bias) {
-    this.value = 0;
-    this.bias = bias;
-  }
-}
-
-export class Connection {
-  constructor(input, output, weight) {
-    this.input = input;
-    this.output = output;
-    this.weight = weight;
-  }
-}
-
-export class Network {
-  constructor(inputs, outputs, neurons, conns) {
-    this.inputs = new Array(inputs)
-      .fill(0)
-      .map((_) => new Neuron(Math.random() * 2 - 1));
-    this.outputs = new Array(outputs)
-      .fill(0)
-      .map((_) => new Neuron(Math.random() * 2 - 1));
-    this.neurons = new Array(neurons)
-      .fill(0)
-      .map((_) => new Neuron(Math.random() * 2 - 1));
-    this.conns = new Array(conns)
-      .fill(0)
-      .map(
-        (_) =>
-          new Connection(
-            this.neurons.random(),
-            this.neurons.random(),
-            Math.random() * 2 - 1
-          )
-      );
-  }
-
-  step() {
-    let old = new Map();
-
-    for (const input of this.inputs) old.set(input, input.value);
-    for (const output of this.outputs) old.set(output, output.value);
-    for (const neuron of this.neurons) old.set(neuron, Math.tanh(neuron.value));
-
-    for (const conn of this.conns) {
-      conn.output.value += old.get(conn.input) * conn.weight;
-    }
-
-    const values = this.outputs.map((o) => Math.tanh(o.value));
-    return values.indexOf(Math.max(...values));
-  }
-}
-
-let network = new Network(16, 6, 128, 256);
-
-export const Colonia = function (myName, myNode, enemyNode) {
-  network.inputs[0].value = +!!myNode.x;
-  network.inputs[1].value = +!!myNode.y;
-  network.inputs[2].value = +myNode.left;
-  network.inputs[3].value = +myNode.right;
-  network.inputs[4].value = +myNode.up;
-  network.inputs[5].value = +myNode.down;
-  network.inputs[6].value = +myNode.forward;
-  network.inputs[7].value = +myNode.backward;
-
-  network.inputs[8].value = +!!enemyNode.x;
-  network.inputs[9].value = +!!enemyNode.y;
-  network.inputs[10].value = +enemyNode.left;
-  network.inputs[11].value = +enemyNode.right;
-  network.inputs[12].value = +enemyNode.up;
-  network.inputs[13].value = +enemyNode.down;
-  network.inputs[14].value = +enemyNode.forward;
-  network.inputs[15].value = +enemyNode.backward;
-
-  return ["left", "right", "up", "down", "forward", "backward"][network.step()];
-};
+export const Colonia = makeStep(0);
