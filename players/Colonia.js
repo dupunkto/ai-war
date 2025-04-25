@@ -2,11 +2,11 @@
 import { play } from "../maze.js";
 import { Astraeus } from "./Astraeus.js";
 
-import { dlopen, FFIType, JSCallback } from "bun:ffi";
+import { dlopen, FFIType, JSCallback, suffix } from "bun:ffi";
 const { u32, f32, bool, cstring, callback } = FFIType;
 const {
     symbols: { init, deinit, step, train },
-} = dlopen(`libColonia`, {
+} = dlopen(`libColonia.${suffix}`, {
     init: {
         args: [],
         returns: "void",
