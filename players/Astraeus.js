@@ -1,8 +1,8 @@
 let roundIter = 0;
 let backtrackIter = 0;
 
-const claimedTerritory = [];
-const enemyTerritory = [];
+const claimedTerritory = new Set();
+const enemyTerritory = new Set();
 
 const backtrack = []; // backtrack contains the opposite of all the moves
 
@@ -23,8 +23,8 @@ export const Astraeus = function (myName, node, enemyNode) {
   // node is where we are now.
   // enemyNode is where the enemy is now.
 
-  claimedTerritory.push(node);
-  enemyTerritory.push(enemyNode);
+  claimedTerritory.add(`${node.x},${node.y},${node.z}`);
+  enemyTerritory.add(`${enemyNode.x},${enemyNode.y},${enemyNode.z}`);
 
   // claimedTerritory is where we have been already
   // enemyTerritory is where the enemy has been already
@@ -60,10 +60,8 @@ export const Astraeus = function (myName, node, enemyNode) {
 
     p.direction = direction;
 
-    const sameNode = (n) => n.x == p.x && n.y == p.y && n.z == p.z;
-
-    const claimed = claimedTerritory.some(sameNode);
-    const enemyClaimed = enemyTerritory.some(sameNode);
+    const claimed = claimedTerritory.has(`${p.x},${p.y},${p.z}`);
+    const enemyClaimed = enemyTerritory.has(`${p.x},${p.y},${p.z}`);
 
     if (!claimed && !enemyClaimed) freeNodes.push(p)
     if (!enemyClaimed) ownNodes.push(p)
@@ -81,7 +79,7 @@ export const Astraeus = function (myName, node, enemyNode) {
     reason = "free";
   } else if (backtrack.length != 0) {
     // If there are no free nodes, backtrack (if we can), so we can find a space
-    // where there is a free enemy node
+    // where there is a free node
     finalDecision = backtrack.pop();
     backtrackIter++;
     reason = "backtrack";
@@ -98,9 +96,7 @@ export const Astraeus = function (myName, node, enemyNode) {
   //   `[${iterCounter}] coords: ${node.x},${node.y},${node.z} move: ${finalDecision} (${reason}) ter: ${territory.size}`
   // );
 
-  console.log(
-    `Astreaus: total territory (estimate): ${claimedTerritory.length - backtrackIter}, iter: ${roundIter}, backtrack: ${backtrackIter}`
-  );
+  if(roundIter % 100 == 0) console.log(`Astreaus: total territory: ${claimedTerritory.size}, iter: ${roundIter}, backtrack: ${backtrackIter}`);
 
   // Unless we are already backtracking, push the move 
   // that would be needed to backtrack
