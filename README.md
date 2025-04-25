@@ -1,6 +1,6 @@
 # AI war
 
-We are batteling against our amazing CS teacher to build an the best algorithm/AI to conquer an 3D maze.
+We are batteling against our **amazing** CS teacher to build an the best algorithm/AI to conquer an 3D maze.
 
 We built 2 algorithms: **Astreaus** (a very logical algorithm) and **Colonia** (a neural network).
 
@@ -112,9 +112,9 @@ To participate you should abide by the following rules:
 
 ## Wall of fame (20000 battles fought)
 
-player          | wins     | losses     | based on 
-----------------|----------|------------|----------|
-RandomDirection | 2295     | 17705      | local
-Teacher         | 17705    | 2295       | local
+player  | wins     | losses     | based on
+--------|----------|------------|----------
+Random  | 2295     | 17705      | local
+Teacher | 17705    | 2295       | local
 
 Last updated Apr 23, 15:10, 2025
