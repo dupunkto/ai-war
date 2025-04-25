@@ -1,5 +1,4 @@
 const randomDirection = function (myNode, enemyNode) {
-    console.log(myNode);
     const possibleDirections = [];
     if (myNode.left) {
         possibleDirections.push('left');

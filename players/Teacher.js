@@ -1,6 +1,6 @@
 const dangerous = 99999999;
 
-function algorithmFactory() { // this function is called each time you play a new game against an other algorithm
+function algorithmFactory() { // this function is called each time you play a new game against another algorithm
 
     const weightsByLocation = {}; // state you want to keep per game
 
