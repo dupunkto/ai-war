@@ -30,15 +30,6 @@ function factory() {
     // claimedTerritory is where we have been already
     // enemyTerritory is where the enemy has been already
   
-    const neighbouringNodes = {
-      left: { x: node.x - 1, y: node.y, z: node.z },
-      right: { x: node.x + 1, y: node.y, z: node.z },
-      up: { x: node.x, y: node.y - 1, z: node.z },
-      down: { x: node.x, y: node.y + 1, z: node.z },
-      forward: { x: node.x, y: node.y, z: node.z + 1 },
-      backward: { x: node.x, y: node.y, z: node.z - 1 },
-    };
-  
     // possibleDirections contains all the directions where there is a node
     const possibleDirections = [];
   
@@ -57,15 +48,13 @@ function factory() {
   
     for (const direction of possibleDirections) {
       // `p` is short for possibleNode, so that is the node object for that direction
-      const p = neighbouringNodes[direction];
-  
-      p.direction = direction;
-  
+      const p = node[direction];
+    
       const claimed = claimedTerritory.has(key(p));
       const enemyClaimed = enemyTerritory.has(key(p));
   
-      if (!claimed && !enemyClaimed) freeNodes.push(p)
-      if (!enemyClaimed) ownNodes.push(p)
+      if (!claimed && !enemyClaimed) freeNodes.push(direction);
+      if (!enemyClaimed) ownNodes.push(direction);
     }
   
     // Determine which node we want to move to.
@@ -76,7 +65,7 @@ function factory() {
     if (freeNodes.length != 0) {
       // Check which nodes are neither potential enemies or
       // already claimed. If any, pick a random one.
-      decision = random(freeNodes).direction;
+      decision = random(freeNodes);
       reason = "free";
     } else if (backtrack.length != 0) {
       // If there are no free nodes, backtrack (if we can), so we can find a space
@@ -87,7 +76,7 @@ function factory() {
     } else {
       // If we detect there are no options left, at least stay in our
       // own territory, so we never enter enemy territory
-      decision = random(ownNodes).direction;
+      decision = random(ownNodes);
       reason = "stuck";
     }
   
