@@ -53,6 +53,10 @@ function explodeCenter(allNodes, node, explosions) {
 
     for (const direction of directions3D) {
 
+        if(Math.random() > 0.5) {
+            continue;
+        }
+
         const x = node.x + direction.x;
         const y = node.y + direction.y;
         const z = node.z + direction.z;
