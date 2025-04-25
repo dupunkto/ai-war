@@ -117,22 +117,19 @@ var random: std.Random = std.crypto.random;
 
 export fn train(
     iters: u32,
-    better: *const fn(usize, usize) callconv(.C) bool,
-    gc: *const fn() callconv(.C) void,
+    better: *const fn(usize) callconv(.C) u32,
 ) void {
     const allocator = arena.allocator();
 
     for (0..iters) |round| {
         std.debug.print("Training round: {d}\n", .{round});
         trainStep(allocator, better) catch |err| std.debug.panic("frfr nocap: {}", .{err});
-
-        _ = gc;
     }
 }
 
 fn trainStep(
     allocator: Allocator,
-    better: *const fn(usize, usize) callconv(.C) bool,
+    better: *const fn(usize) callconv(.C) u32,
 ) !void {
     var pool: std.Thread.Pool = undefined;
     try pool.init(.{.allocator = allocator});
@@ -143,11 +140,23 @@ fn trainStep(
     for (&training) |*net|
         network.move(net);
     for (&training) |net|
-        try pool.spawn(Network.mutate, .{net, 0.2});
+        try pool.spawn(Network.mutate, .{net, 0.5});
     pool.waitAndWork(&work);
     pool.deinit();
     std.debug.print("\n", .{});
 
+    // Opponent Training
+    //var buf: [training.len]u32 = undefined;
+    //for (&buf, 0..) |*score, i| {
+    //    std.debug.print("@", .{});
+    //    score.* = better(i);
+    //}
+
+    //const index = std.mem.indexOfMax(u32, &buf);
+    //training[index].move(&network);
+    //std.debug.print("@\n", .{});
+
+    // Tournament Training
     var buf = training;
     var len = training.len / 2;
     while (len >= 1) : (len /= 2) for (0..len) |i| {
@@ -217,15 +226,15 @@ export fn init() void {
 
     network = Network.init(
         allocator,
-        &.{18, 100, 100, 100, 100, 6},
-        &.{relu, relu, relu, relu, softmax}
+        &.{18, 100, 6},
+        &.{relu, softmax},
     ) catch @panic("Error creating global network");
 
     for (&training) |*net|
         net.* = Network.init(
             allocator,
-            &.{18, 100, 100, 100, 100, 6},
-            &.{relu, relu, relu, relu, softmax}
+            &.{18, 100, 6},
+            &.{relu, softmax},
         ) catch @panic("Error creating global network");
 }
 

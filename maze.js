@@ -1,5 +1,5 @@
 // TODO optimize for performance
-export const play = (function () {
+export const play = function (playerName1, playerFunc1, playerName2, playerFunc2) {
   const center = {
     x: 0,
     y: 0,
@@ -157,98 +157,98 @@ export const play = (function () {
     };
   }
 
-  return function (playerName1, playerFunc1, playerName2, playerFunc2) {
-    let keys = Object.keys(allNodes);
-    let player1 = allNodes[keys[Math.floor(Math.random() * keys.length)]];
-    let player2 = allNodes[keys[Math.floor(Math.random() * keys.length)]];
+  let keys = Object.keys(allNodes);
+  let player1 = allNodes[keys[Math.floor(Math.random() * keys.length)]];
+  let player2 = allNodes[keys[Math.floor(Math.random() * keys.length)]];
+  player1.owner = playerName1;
+  player2.owner = playerName2;
+
+  const rounds = keys.length * 4;
+  const result = {
+    nodeCount: keys.length,
+    rounds,
+    roundsPlayed: 0,
+    player1: {
+      name: playerName1,
+      start: readonlyNode(player1),
+      points: 0,
+      lossCondition: {
+        unsupportedAction: false,
+        forbiddenAction: false,
+        points: false,
+      },
+    },
+    player2: {
+      name: playerName2,
+      start: readonlyNode(player2),
+      points: 0,
+      lossCondition: {
+        unsupportedAction: false,
+        forbiddenAction: false,
+        points: false,
+      },
+    },
+    victor: null,
+  };
+
+
+  for (let i = 0; i < rounds; i++) {
+    let direction = playerFunc1(
+      playerName1,
+      readonlyNode(player1),
+      readonlyNode(player2),
+    );
+    player1 = player1[direction];
+
+    if (!player1 || typeof player1.x !== "number") {
+      result.victor = player2;
+      result.player1.lossCondition.unsupportedAction = true;
+      break;
+    }
+    if (player1.owner === playerName2) {
+      result.victor = player2;
+      result.player1.lossCondition.forbiddenAction = true;
+      break;
+    }
     player1.owner = playerName1;
+
+    direction = playerFunc2(
+      playerName2,
+      readonlyNode(player2),
+      readonlyNode(player1),
+    );
+    player2 = player2[direction];
+
+    if (!player2 || typeof player2.x !== "number") {
+      result.victor = player1;
+      result.player2.lossCondition.unsupportedAction = true;
+      break;
+    }
+    if (player2.owner === playerName1) {
+      result.victor = player1;
+      result.player2.lossCondition.forbiddenAction = true;
+      break;
+    }
     player2.owner = playerName2;
 
-    const rounds = keys.length * 4;
-    const result = {
-      nodeCount: keys.length,
-      rounds,
-      roundsPlayed: 0,
-      player1: {
-        name: playerName1,
-        start: readonlyNode(player1),
-        points: 0,
-        lossCondition: {
-          unsupportedAction: false,
-          forbiddenAction: false,
-          points: false,
-        },
-      },
-      player2: {
-        name: playerName2,
-        start: readonlyNode(player2),
-        points: 0,
-        lossCondition: {
-          unsupportedAction: false,
-          forbiddenAction: false,
-          points: false,
-        },
-      },
-      victor: null,
-    };
+    result.roundsPlayed = i + 1;
+  }
 
-    for (let i = 0; i < rounds; i++) {
-      let direction = playerFunc1(
-        playerName1,
-        readonlyNode(player1),
-        readonlyNode(player2),
-      );
-      player1 = player1[direction];
-
-      if (!player1 || typeof player1.x !== "number") {
-        result.victor = player2;
-        result.player1.lossCondition.unsupportedAction = true;
-        break;
-      }
-      if (player1.owner === playerName2) {
-        result.victor = player2;
-        result.player1.lossCondition.forbiddenAction = true;
-        break;
-      }
-      player1.owner = playerName1;
-
-      direction = playerFunc2(
-        playerName2,
-        readonlyNode(player2),
-        readonlyNode(player1),
-      );
-      player2 = player2[direction];
-
-      if (!player2 || typeof player2.x !== "number") {
-        result.victor = player1;
-        result.player2.lossCondition.unsupportedAction = true;
-        break;
-      }
-      if (player2.owner === playerName1) {
-        result.victor = player1;
-        result.player2.lossCondition.forbiddenAction = true;
-        break;
-      }
-      player2.owner = playerName2;
-
-      result.roundsPlayed = i + 1;
+  for (const node of Object.values(allNodes)) {
+    if (node.owner === playerName1) {
+      result.player1.points++;
+    } else if (node.owner === playerName2) {
+      result.player2.points++;
     }
+  }
 
-    for (const node of Object.values(allNodes)) {
-      if (node.owner === playerName1) {
-        result.player1.points++;
-      } else if (node.owner === playerName2) {
-        result.player2.points++;
-      }
-    }
+  if (result.player1.points > result.player2.points) {
+    result.player2.lossCondition.points = true;
+    result.victor = result.player1;
+  } else if (result.player1.points < result.player2.points) {
+    result.player1.lossCondition.points = true;
+    result.victor = result.player2;
+  }
 
-    if (result.player1.points > result.player2.points) {
-      result.player2.lossCondition.points = true;
-      result.victor = result.player1;
-    } else if (result.player1.points < result.player2.points) {
-      result.player1.lossCondition.points = true;
-      result.victor = result.player2;
-    }
-    return result;
-  };
-})();
+  return result;
+};

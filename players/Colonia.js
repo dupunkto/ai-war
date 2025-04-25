@@ -1,5 +1,6 @@
 // (random) BEST direction
 import { play } from "../maze.js";
+import { Astraeus } from "./Astraeus.js";
 
 import { dlopen, FFIType, JSCallback, suffix } from "bun:ffi";
 const { u32, f32, bool, cstring, callback } = FFIType;
@@ -19,25 +20,19 @@ const {
         returns: cstring
     },
     train: {
-        args: [u32, callback, callback],
+        args: [u32, callback],
         returns: "void",
     },
 });
 
-const gc = new JSCallback(
-    async () => {
-        const snapshot = generateHeapSnapshot();
-        await Bun.write("heap.json", JSON.stringify(snapshot, null, 2));
-    },
-    {
-        args: [],
-        returns: "void",
-    },
-);
-
 const better = new JSCallback(
     (lhs, rhs) => {
         const res = play("lhs", makeStep(lhs+1), "rhs", makeStep(rhs+1));
+        const loss1 = res.player1.lossCondition.unsupportedAction || res.player1.lossCondition.forbiddenAction;
+        const loss2 = res.player2.lossCondition.unsupportedAction || res.player2.lossCondition.forbiddenAction;
+
+        if (!loss1 && loss2) return true;
+        if (loss1 && !loss2) return false;
         return res.player1.points >= res.player2.points;
     },
     {
@@ -73,6 +68,6 @@ const makeStep = function(index) {
 };
 
 init();
-train(100, better, gc);
+//train(100, better); // Disabled for debug purposes
 
 export const Colonia = makeStep(0);
