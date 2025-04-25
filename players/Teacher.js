@@ -7,7 +7,7 @@ function algorithmFactory() { // this function is called each time you play a ne
     // myNode is the node that you currently occupy
     // enemyNode is the node that your enemy currently occupies
     return function (myNode, enemyNode) {
-        weightsByLocation[`${enemyNode.x}${enemyNode.y}${enemyNode.z}`] = dangerous;
+        weightsByLocation[`${enemyNode.x},${enemyNode.y},${enemyNode.z}`] = dangerous;
        
         const directions = {
             left: { x: myNode.x - 1, y: myNode.y, z: myNode.z },
@@ -23,7 +23,7 @@ function algorithmFactory() { // this function is called each time you play a ne
             if(!myNode[k]) {
                 continue;
             }
-            const locationHash = `${v.x}${v.y}${v.z}`;
+            const locationHash = `${v.x},${v.y},${v.z}`;
             const existingWeight = weightsByLocation[locationHash]
             possibleDirections.push({
                 name: k,

@@ -35,10 +35,10 @@ function createNode(allNodes, x, y, z) {
       z: z,
       nodes: Array.from({ length: 6 })
   };
-  allNodes[`${x}${y}${z}`] = newNode;
+  allNodes[`${x},${y},${z}`] = newNode;
 
   for (const direction of directions3D) {
-      const locationHash = `${x + direction.x}${y + direction.y}${z + direction.z}`
+      const locationHash = `${x + direction.x},${y + direction.y},${z + direction.z}`
       const otherNode = allNodes[locationHash];
       if (otherNode) {
           newNode.nodes[direction.id] = otherNode;
@@ -61,7 +61,7 @@ function explodeCenter(allNodes, node, explosions) {
       const y = node.y + direction.y;
       const z = node.z + direction.z;
 
-      if (allNodes[`${x}${y}${z}`]) {
+      if (allNodes[`${x},${y},${z}`]) {
           continue;
       }
 
