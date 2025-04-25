@@ -43,6 +43,9 @@ const better = new JSCallback(
 
 const makeStep = function(index) {
     return function (myName, myNode, enemyNode) {
+        if (myName === null)
+            return;
+
         step(
             index,
             myNode.x,

@@ -17,7 +17,6 @@ const allPlayerStats = players.reduce((map, player) => {
   };
   return map;
 }, {});
-console.log(allPlayerStats);
 
 function updatePlayerStats(result, player) {
   const playerStats = allPlayerStats[player.name];

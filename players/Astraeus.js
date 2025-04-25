@@ -1,10 +1,10 @@
 let roundIter = 0;
 let backtrackIter = 0;
 
-const claimedTerritory = new Set();
-const enemyTerritory = new Set();
+let claimedTerritory = new Set();
+let enemyTerritory = new Set();
 
-const backtrack = []; // backtrack contains the opposite of all the moves
+let backtrack = []; // backtrack contains the opposite of all the moves
 
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
@@ -18,6 +18,15 @@ const opposites = {
 };
 
 export const Astraeus = function (myName, node, enemyNode) {
+  if (myName === null) {
+    roundIter = 0;
+    backtrackIter = 0;
+    claimedTerritory = new Set();
+    enemyTerritory = new Set();
+    backtrack = [];
+    return;
+  }
+
   roundIter++;
 
   // node is where we are now.
