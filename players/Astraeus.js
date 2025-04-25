@@ -1,4 +1,3 @@
-const key = (node) => `${node.x},${node.y},${node.z}`;
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const opposites = {
@@ -24,8 +23,8 @@ function factory() {
   return function (node, enemyNode) {  
     roundIter++;
   
-    claimedTerritory.add(key(node));
-    enemyTerritory.add(key(enemyNode));
+    claimedTerritory.add(node.id);
+    enemyTerritory.add(enemyNode.id);
   
     // claimedTerritory is where we have been already
     // enemyTerritory is where the enemy has been already
@@ -50,8 +49,8 @@ function factory() {
       // `p` is short for possibleNode, so that is the node object for that direction
       const p = node[direction];
     
-      const claimed = claimedTerritory.has(key(p));
-      const enemyClaimed = enemyTerritory.has(key(p));
+      const claimed = claimedTerritory.has(p.id)
+      const enemyClaimed = enemyTerritory.has(p.id);
   
       if (!claimed && !enemyClaimed) freeNodes.push(direction);
       if (!enemyClaimed) ownNodes.push(direction);
