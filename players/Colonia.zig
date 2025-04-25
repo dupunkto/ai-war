@@ -117,7 +117,7 @@ var random: std.Random = std.crypto.random;
 
 export fn train(
     iters: u32,
-    better: *const fn(usize) callconv(.C) u32,
+    better: *const fn(usize, usize) callconv(.C) bool,
 ) void {
     const allocator = arena.allocator();
 
@@ -129,7 +129,7 @@ export fn train(
 
 fn trainStep(
     allocator: Allocator,
-    better: *const fn(usize) callconv(.C) u32,
+    better: *const fn(usize, usize) callconv(.C) bool,
 ) !void {
     var pool: std.Thread.Pool = undefined;
     try pool.init(.{.allocator = allocator});
