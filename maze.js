@@ -53,7 +53,7 @@ function explodeCenter(allNodes, node, explosions) {
 
     for (const direction of directions3D) {
 
-        if(Math.random() > 0.5) {
+        if(Math.random() < 0.1) {
             continue;
         }
 
@@ -73,7 +73,7 @@ function explodeCenter(allNodes, node, explosions) {
         );
         node.nodes[direction.id] = newNode;
 
-        if (explosions < 80) {
+        if (explosions < 60) {
             explodeCenter(allNodes, newNode, explosions + 1);
         }
     }

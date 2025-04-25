@@ -1,6 +1,8 @@
+import { maze } from "./maze.js";
 import { play } from "./play.js";
 
 export const fight = (players, iterations) => {
+    console.log(`maze size: ${maze.length}`);
     const allPlayerStats = players.reduce((map, player) => {
         map[player.name] = {
             totalNodeCount: 0,
