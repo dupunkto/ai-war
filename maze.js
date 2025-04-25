@@ -73,7 +73,7 @@ function explodeCenter(allNodes, node, explosions) {
         );
         node.nodes[direction.id] = newNode;
 
-        if (explosions < 20) {
+        if (explosions < 80) {
             explodeCenter(allNodes, newNode, explosions + 1);
         }
     }
