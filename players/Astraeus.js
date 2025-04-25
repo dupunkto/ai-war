@@ -20,11 +20,17 @@ function factory() {
 
   // node is where we are now.
   // enemyNode is where the enemy is now.
-  return function (node, enemyNode) {  
-    roundIter++;
-  
+  return function (node, enemyNode) {    
     claimedTerritory.add(node.id);
     enemyTerritory.add(enemyNode.id);
+
+    if(roundIter == 0) {
+      // In the first round, add all nodes adjacent to the enemyNode to the
+      // enemy territory to prevent stepping on the missing starting position.
+      for (const direction of ["left", "right", "up", "down", "forward", "backward"]) {
+        if (enemyNode[direction]) enemyTerritory.add(enemyNode[direction].id);
+      }
+    }
   
     // claimedTerritory is where we have been already
     // enemyTerritory is where the enemy has been already
@@ -53,7 +59,7 @@ function factory() {
       const enemyClaimed = enemyTerritory.has(p.id);
   
       if (!claimed && !enemyClaimed) freeNodes.push(direction);
-      if (!enemyClaimed) ownNodes.push(direction);
+      if (claimed) ownNodes.push(direction);
     }
   
     // Determine which node we want to move to.
@@ -80,15 +86,17 @@ function factory() {
     }
   
     // prompt("Next?");
-  
-    if(roundIter % 1 == 0) {
-      console.log(`Astreaus: total territory: ${claimedTerritory.size}, iter: ${roundIter}, backtrack: ${backtrackIter}, debug: ${enemyTerritory.size}`);
-    }
-  
+
     // Unless we are already backtracking, push the move 
     // that would be needed to backtrack.
     if (reason !== "backtrack") {
       backtrack.push(opposites[decision]);
+    }
+  
+    roundIter++;
+
+    if(roundIter % 100 == 0) {
+      console.log(`Astreaus: total territory: ${claimedTerritory.size}, iter: ${roundIter}, backtrack: ${backtrackIter}, debug: ${enemyTerritory.size}`);
     }
   
     return decision;
