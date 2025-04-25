@@ -47,7 +47,7 @@ for (let i = 0; i < 30; i++) {
       let result = play(pa.name, pa.algorithm, pb.name, pb.algorithm);
       updatePlayerStats(result, result.player1);
       updatePlayerStats(result, result.player2);
-      if (result.victor && result.victor.name) {
+      if (result.victor) {
         allPlayerStats[result.victor.name].wins++;
       }
     }

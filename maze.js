@@ -201,12 +201,12 @@ export const play = function (playerName1, playerFunc1, playerName2, playerFunc2
     player1 = player1[direction];
 
     if (!player1 || typeof player1.x !== "number") {
-      result.victor = player2;
+      result.victor = result.player2;
       result.player1.lossCondition.unsupportedAction = true;
       break;
     }
     if (player1.owner === playerName2) {
-      result.victor = player2;
+      result.victor = result.player2;
       result.player1.lossCondition.forbiddenAction = true;
       break;
     }
@@ -220,12 +220,12 @@ export const play = function (playerName1, playerFunc1, playerName2, playerFunc2
     player2 = player2[direction];
 
     if (!player2 || typeof player2.x !== "number") {
-      result.victor = player1;
+      result.victor = result.player1;
       result.player2.lossCondition.unsupportedAction = true;
       break;
     }
     if (player2.owner === playerName1) {
-      result.victor = player1;
+      result.victor = result.player1;
       result.player2.lossCondition.forbiddenAction = true;
       break;
     }
