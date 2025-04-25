@@ -1,9 +1,5 @@
-// random direction
-export const RandomDirection = function (myName, myNode, enemyNode) {
-    if(myName === null) {
-        return;
-    }
-
+const randomDirection = function (myNode, enemyNode) {
+    console.log(myNode);
     const possibleDirections = [];
     if (myNode.left) {
         possibleDirections.push('left');
@@ -23,7 +19,10 @@ export const RandomDirection = function (myName, myNode, enemyNode) {
     if (myNode.backward) {
         possibleDirections.push('backward');
     }
+    return possibleDirections[ Math.floor(Math.random() * possibleDirections.length)];
+}
 
-    const i = Math.floor(Math.random() * possibleDirections.length);
-    return possibleDirections[i];
+export const RandomDirection = {
+    name: 'RandomDirection',
+    algorithm: () => randomDirection,
 }
