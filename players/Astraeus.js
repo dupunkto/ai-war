@@ -4,9 +4,18 @@ let backtrackIter = 0;
 const claimedTerritory = [];
 const enemyTerritory = [];
 
-const backtrack = []; // Backtrack contains the opposite of those moves.
+const backtrack = []; // backtrack contains the opposite of all the moves
 
 const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+const opposites = {
+  left: "right",
+  right: "left",
+  up: "down",
+  down: "up",
+  forward: "backward",
+  backward: "forward",
+};
 
 export const Astraeus = function (myName, node, enemyNode) {
   roundIter++;
@@ -29,6 +38,7 @@ export const Astraeus = function (myName, node, enemyNode) {
     backward: { x: node.x, y: node.y, z: node.z - 1 },
   };
 
+  // possibleDirections contains all the directions where there is a node
   const possibleDirections = [];
 
   if (node.left) possibleDirections.push("left");
@@ -38,18 +48,25 @@ export const Astraeus = function (myName, node, enemyNode) {
   if (node.forward) possibleDirections.push("forward");
   if (node.backward) possibleDirections.push("backward");
 
-  const possibleMoves = [];
+  // freeNodes containes all the node objects (with some extra info) for all the nodes that are free
+  const freeNodes = [];
+
+  // ownNodes containes all the node objects (with some extra info) for all the nodes that are already ours
+  const ownNodes = [];
 
   for (const direction of possibleDirections) {
-    // `p` is short for possibleNode.
+    // `p` is short for possibleNode, so that is the node object for that direction
     const p = neighbouringNodes[direction];
-    const x = (n) => n.x == p.x && n.y == p.y && n.z == p.z;
-
-    p.claimed = claimedTerritory.some(x);
-    p.enemyClaimed = enemyTerritory.some(x);
 
     p.direction = direction;
-    possibleMoves.push(p);
+
+    const sameNode = (n) => n.x == p.x && n.y == p.y && n.z == p.z;
+
+    const claimed = claimedTerritory.some(sameNode);
+    const enemyClaimed = enemyTerritory.some(sameNode);
+
+    if (!claimed && !enemyClaimed) freeNodes.push(p)
+    if (!enemyClaimed) ownNodes.push(p)
   }
 
   // Determine which node we want to move to.
@@ -57,31 +74,22 @@ export const Astraeus = function (myName, node, enemyNode) {
   let finalDecision;
   let reason;
 
-  const freeMoves = possibleMoves.filter((n) => !n.claimed && !n.enemyClaimed);
-  const ownMoves = possibleMoves.filter((n) => !n.enemyClaimed);
-
-  if (freeMoves.length != 0) {
+  if (freeNodes.length != 0) {
     // Check which nodes are neither potential enemies or
     // already claimed. If any, pick a random one.
-    finalDecision = random(freeMoves).direction;
+    finalDecision = random(freeNodes).direction;
     reason = "free";
   } else if (backtrack.length != 0) {
-    // If we find a dead-end, backtrack until we find an free space.
+    // If there are no free nodes, backtrack (if we can), so we can find a space
+    // where there is a free enemy node
     finalDecision = backtrack.pop();
     backtrackIter++;
     reason = "backtrack";
   } else {
     // If we detect there are no options left, at least stay in our
-    // own territory.
-    finalDecision = random(ownMoves).direction;
-    reason = "stuclk";
-  }
-
-  let territory = new Set();
-
-  for (const c of claimedTerritory) {
-    // `c` is short for claimedNode.
-    territory.add(`${c.x},${c.y},${c.z}`);
+    // own territory, so we never enter enemy territory
+    finalDecision = random(ownNodes).direction;
+    reason = "stuck";
   }
 
   // prompt("Next?");
@@ -91,16 +99,13 @@ export const Astraeus = function (myName, node, enemyNode) {
   // );
 
   console.log(
-    `territory: ${territory.size} iter: ${roundIter} backtrack: ${backtrackIter}`
+    `Astreaus: total territory (estimate): ${claimedTerritory.length - backtrackIter}, iter: ${roundIter}, backtrack: ${backtrackIter}`
   );
 
-  if (reason != "backtrack") {
-    if (finalDecision == "left") backtrack.push("right");
-    if (finalDecision == "right") backtrack.push("left");
-    if (finalDecision == "up") backtrack.push("down");
-    if (finalDecision == "down") backtrack.push("up");
-    if (finalDecision == "forward") backtrack.push("backward");
-    if (finalDecision == "backward") backtrack.push("forward");
+  // Unless we are already backtracking, push the move 
+  // that would be needed to backtrack
+  if (reason !== "backtrack") {
+    backtrack.push(opposites[finalDecision]);
   }
 
   return finalDecision;
