@@ -1,1 +1,7 @@
 node_modules/
+
+Colonia.lib
+libColonia.dll
+libColonia.dll.obj
+libColonia.pdb
+libColonia.so
